@@ -47,15 +47,24 @@ class Image {
   }
 }
 
-function getImages(): {
+function getImages(folder?:string): {
   images: ImageList;
 } {
+  let scope:string[];
 
-  const folderPaths = getPreferenceValues<Preferences>()
-    .paths.split(",")
-    .map((s) => s.trim());
+  // The scope of search can be either everything,
+  // or a single folder path
+  if(folder == "Everything") {
+    scope = getPreferenceValues<Preferences>()
+      .paths.split(",")
+      .map((s) => s.trim());
+  }
+  else {
+    scope = new Array(folder.trim());
+  }
 
-  let images = folderPaths
+  // Walk the scope and create Images
+  let images = scope
     .flatMap((base) => {
       if (base.startsWith("~")) {
         base = homedir() + base.slice(1);
@@ -88,29 +97,36 @@ function getImages(): {
 }
 
 export default function Command() {
-  const [itemSize, setItemSize] = useState<Grid.ItemSize>(Grid.ItemSize.Medium);
-  const [isLoading, setIsLoading] = useState(true);
+  const preferences = getPreferenceValues<Preferences>();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { images } = getImages();
+  // Get folders listed in preferences
+  const folderPaths = preferences
+    .paths.split(",")
+    .map((s) => s.trim());
+  folderPaths.unshift('Everything');
+
+  const [{ images }, setImages] = useState(getImages(folderPaths[0]));
 
   return (
     <Grid
       navigationTitle="Gallery"
-      itemSize={itemSize}
       isLoading={isLoading}
       searchBarPlaceholder="Search..."
+      itemSize={preferences.itemSize as Grid.ItemSize}
       searchBarAccessory={
         <Grid.Dropdown
           tooltip="Size"
-          storeValue
+          storeValue={false}
           onChange={(newValue) => {
-            setItemSize(newValue as Grid.ItemSize);
+            // Reload images with correct filtering...
+            setImages(getImages(newValue));
             setIsLoading(false);
           }}
         >
-          <Grid.Dropdown.Item title="Large" value={Grid.ItemSize.Large} />
-          <Grid.Dropdown.Item title="Medium" value={Grid.ItemSize.Medium} />
-          <Grid.Dropdown.Item title="Small" value={Grid.ItemSize.Small} />
+          {folderPaths.flatMap((folder, index) => {
+            return <Grid.Dropdown.Item key={index} title={folder} value={folder} />
+          })}
         </Grid.Dropdown>
       }
     >

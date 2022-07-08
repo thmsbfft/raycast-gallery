@@ -21,17 +21,39 @@
           "type": "textfield",
           "required": true,
           "title": "Paths to index:",
-          "description": "Comma-separated list of paths to index. Example: '~/work,~/projects'. Wildcards allowed, e.g. '~/go/src/*/*'",
+          "description": "Comma-separated list of paths to index.",
           "placeholder": "~/Pictures,~/Dropbox/MOOD",
           "default": ""
+        },
+        {
+          "name": "itemSize",
+          "type": "dropdown",
+          "description": "Set the size of the image grid.",
+          "required": false,
+          "title": "Grid size:",
+          "default": "large",
+          "data": [
+            {
+              "title": "Small",
+              "value": "small"
+            },
+            {
+              "title": "Medium",
+              "value": "medium"
+            },
+            {
+              "title": "Large",
+              "value": "large"
+            }
+          ]
         },
         {
           "name": "videos",
           "type": "checkbox",
           "required": false,
-          "title": "Preferences",
+          "title": "Preferences:",
           "label": "Include video files",
-          "description": "Include video files",
+          "description": "Whether or not video files should be included in the grid.",
           "default": true
         }
       ]
