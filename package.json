@@ -12,7 +12,7 @@
   "commands": [
     {
       "name": "index",
-      "title": "gallery",
+      "title": "Gallery",
       "description": "Search and display images from a selection of system folders.",
       "mode": "view",
       "preferences": [
