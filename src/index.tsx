@@ -119,7 +119,7 @@ export default function Command() {
           <Grid.Item
             key={image.id}
             title={image.name}
-            content={ image.fileKind === "VIDEO" ? Icon.Dot : {
+            content={ image.fileKind === "VIDEO" ? {fileIcon: image.fullPath} : {
               source: image.fullPath,
               fallback: Icon.Dot
             }}
