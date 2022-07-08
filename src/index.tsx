@@ -6,7 +6,9 @@ import {
   Image,
   Icon,
   Application,
-  getPreferenceValues 
+  getPreferenceValues,
+  clearSearchBar,
+  openCommandPreferences
 } from "@raycast/api";
 
 import open = require("open");
@@ -111,8 +113,8 @@ export default function Command() {
   return (
     <Grid
       navigationTitle="Gallery"
-      isLoading={isLoading}
       searchBarPlaceholder="Search..."
+      isLoading={isLoading}
       itemSize={preferences.itemSize as Grid.ItemSize}
       searchBarAccessory={
         <Grid.Dropdown
@@ -121,6 +123,7 @@ export default function Command() {
           onChange={(newValue) => {
             // Reload images with correct filtering...
             setImages(getImages(newValue));
+            clearSearchBar();
             setIsLoading(false);
           }}
         >
@@ -149,6 +152,11 @@ export default function Command() {
                   shortcut={{ modifiers: ["cmd"], key: "f" }}
                 />
                 <Action.ToggleQuickLook shortcut={{ modifiers: ["cmd"], key: "y" }} />
+                <Action
+                  title="Open Preferences"
+                  icon={Icon.Gear}
+                  onAction={openCommandPreferences}
+                />
               </ActionPanel>
             }
           />
