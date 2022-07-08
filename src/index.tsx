@@ -30,6 +30,7 @@ class Image {
   displayPath: string;
   fullPath: string;
   fileKind: string;
+  keywords: string[];
 
   constructor(path: string) {
     this.id = randomUUID();
@@ -46,6 +47,13 @@ class Image {
     if ([".mp4", ".mov", ".mkv", ".webm"].includes(ext)) {
       this.fileKind = "VIDEO"
     }
+    
+    // To create a list of keywords,
+    // break down filename and trim
+    // empty strings
+    this.keywords = this.name
+        .split(/[ _.—-]/i)
+        .filter(w => w.length > 0)
   }
 }
 
@@ -123,7 +131,8 @@ export default function Command() {
           onChange={(newValue) => {
             // Reload images with correct filtering...
             setImages(getImages(newValue));
-            clearSearchBar();
+            console.log('Clear')
+            clearSearchBar({forceScrollToTop: true});
             setIsLoading(false);
           }}
         >
@@ -137,7 +146,8 @@ export default function Command() {
         images.map((image) => (
           <Grid.Item
             key={image.id}
-            title={image.name}
+            keywords={image.keywords}
+            title={preferences.titles ? image.name : ''}
             content={ image.fileKind === "VIDEO" ? {fileIcon: image.fullPath} : {
               source: image.fullPath,
               fallback: Icon.Dot

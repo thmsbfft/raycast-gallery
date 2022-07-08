@@ -12,5 +12,6 @@ TODO:
 - [x] Make a better icon for video files
 - [x] Move Grid itemSize into preferences
 - [x] Use the Grid Dropdown to swap between "Everything" and each of the input folders
-- [ ] Figure out a way to index filenames for raycast search w/o having to display the item title
-- [ ] Add a checkbox preference for showing filenames
+- [x] Figure out a way to index filenames for raycast search w/o having to display the item title
+- [x] Add a checkbox preference for showing filenames
+- [ ] Make a nicer empty screen

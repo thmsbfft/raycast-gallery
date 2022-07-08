@@ -53,7 +53,15 @@
           "required": false,
           "title": "Preferences:",
           "label": "Include video files",
-          "description": "Whether or not video files should be included in the grid.",
+          "description": "Check to include video files in the grid.",
+          "default": true
+        },
+        {
+          "name": "titles",
+          "type": "checkbox",
+          "required": false,
+          "label": "Show file names",
+          "description": "Check to show filenames in the grid.",
           "default": true
         }
       ]
