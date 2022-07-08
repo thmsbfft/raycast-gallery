@@ -3,7 +3,7 @@
   "name": "gallery",
   "title": "Gallery",
   "description": "Search and display images from a selection of system folders.",
-  "icon": "command-icon.png",
+  "icon": "gallery.png",
   "author": "thmsbfft",
   "categories": [
     "Design Tools"

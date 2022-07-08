@@ -1,4 +1,9 @@
-# Gallery
+<p align='center'>
+  <img src='./assets/gallery.png' width='200'/>
+</p>
+
+#### Gallery
+---
 
 Search and display images from a selection of system folders.
 
