@@ -155,6 +155,7 @@ export default function Command() {
                 <Action
                   title="Open Preferences"
                   icon={Icon.Gear}
+                  shortcut={{ modifiers: ["cmd"], key: "," }}
                   onAction={openCommandPreferences}
                 />
               </ActionPanel>
