@@ -131,7 +131,7 @@ export default function Command() {
           onChange={(newValue) => {
             // Reload images with correct filtering...
             setImages(getImages(newValue));
-            console.log('Clear')
+            // This ↓ somehow doesn't seem to do anything?
             clearSearchBar({forceScrollToTop: true});
             setIsLoading(false);
           }}
