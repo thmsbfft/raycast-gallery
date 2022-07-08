@@ -55,9 +55,7 @@ function getImages(): {
     .paths.split(",")
     .map((s) => s.trim());
 
-  console.log(folderPaths);
-
-  const images = folderPaths
+  let images = folderPaths
     .flatMap((base) => {
       if (base.startsWith("~")) {
         base = homedir() + base.slice(1);
@@ -79,6 +77,12 @@ function getImages(): {
       }
     })
     .map((path) => new Image(path));
+
+  if (!getPreferenceValues<Preferences>().videos) {
+    // If the preference (checkbox) is false,
+    // filter images to skip videos fileKind
+    images = images.filter((image) => image.fileKind != "VIDEO")
+  }
 
   return { images };
 }

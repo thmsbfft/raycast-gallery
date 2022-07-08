@@ -24,6 +24,15 @@
           "description": "Comma-separated list of paths to index. Example: '~/work,~/projects'. Wildcards allowed, e.g. '~/go/src/*/*'",
           "placeholder": "~/Pictures,~/Dropbox/MOOD",
           "default": ""
+        },
+        {
+          "name": "videos",
+          "type": "checkbox",
+          "required": false,
+          "title": "Preferences",
+          "label": "Include video files",
+          "description": "Include video files",
+          "default": true
         }
       ]
     }
