@@ -7,7 +7,9 @@
 
 Search and display images from a selection of system folders.
 
-TODO:
+#### TODO
+---
+
 - [x] Add a checkbox preference for displaying video files
 - [x] Make a better icon for video files
 - [x] Move Grid itemSize into preferences
