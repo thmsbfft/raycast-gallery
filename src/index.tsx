@@ -163,16 +163,15 @@ export default function Command() {
                 />
                 <Action.ToggleQuickLook shortcut={{ modifiers: ["cmd"], key: "y" }} />
                 <Action
-                  title="Open Preferences"
+                  title="Configure Command"
                   icon={Icon.Gear}
-                  shortcut={{ modifiers: ["cmd"], key: "," }}
+                  shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
                   onAction={openCommandPreferences}
                 />
               </ActionPanel>
             }
           />
-        ))
-      }
+        ))}
     </Grid>
   );
 }
