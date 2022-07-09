@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { 
+import {
   ActionPanel,
   Action,
   Grid,
@@ -8,18 +8,18 @@ import {
   Application,
   getPreferenceValues,
   clearSearchBar,
-  openCommandPreferences
+  openCommandPreferences,
 } from "@raycast/api";
 
 import open = require("open");
 import { homedir } from "os";
 import { statSync } from "fs";
 import { sync } from "glob";
-import { extname } from 'path';
-import { randomUUID } from 'crypto';
+import { extname } from "path";
+import { randomUUID } from "crypto";
 
 interface Preferences {
-  paths: string
+  paths: string;
 }
 
 type ImageList = Image[];
@@ -43,33 +43,30 @@ class Image {
     const parts = path.split("/");
     this.name = parts[parts.length - 1];
 
-    const ext = extname(this.fullPath)
+    const ext = extname(this.fullPath);
     if ([".mp4", ".mov", ".mkv", ".webm"].includes(ext)) {
-      this.fileKind = "VIDEO"
+      this.fileKind = "VIDEO";
     }
-    
+
     // To create a list of keywords,
     // break down filename and trim
     // empty strings
-    this.keywords = this.name
-        .split(/[ _.—-]/i)
-        .filter(w => w.length > 0)
+    this.keywords = this.name.split(/[ _.—-]/i).filter((w) => w.length > 0);
   }
 }
 
-function getImages(folder?:string): {
+function getImages(folder?: string): {
   images: ImageList;
 } {
-  let scope:string[];
+  let scope: string[];
 
   // The scope of search can be either everything,
   // or a single folder path
-  if(folder == "Everything") {
+  if (folder == "Everything") {
     scope = getPreferenceValues<Preferences>()
       .paths.split(",")
       .map((s) => s.trim());
-  }
-  else {
+  } else {
     scope = new Array(folder.trim());
   }
 
@@ -90,8 +87,7 @@ function getImages(folder?:string): {
 
       if (aBirth > bBirth) {
         return -1;
-      }
-      else {
+      } else {
         return 1;
       }
     })
@@ -100,7 +96,7 @@ function getImages(folder?:string): {
   if (!getPreferenceValues<Preferences>().videos) {
     // If the preference (checkbox) is false,
     // filter images to skip videos fileKind
-    images = images.filter((image) => image.fileKind != "VIDEO")
+    images = images.filter((image) => image.fileKind != "VIDEO");
   }
 
   return { images };
@@ -111,10 +107,8 @@ export default function Command() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Get folders listed in preferences
-  const folderPaths = preferences
-    .paths.split(",")
-    .map((s) => s.trim());
-  folderPaths.unshift('Everything');
+  const folderPaths = preferences.paths.split(",").map((s) => s.trim());
+  folderPaths.unshift("Everything");
 
   const [{ images }, setImages] = useState(getImages(folderPaths[0]));
 
@@ -132,12 +126,12 @@ export default function Command() {
             // Reload images with correct filtering...
             setImages(getImages(newValue));
             // This ↓ somehow doesn't seem to do anything?
-            clearSearchBar({forceScrollToTop: true});
+            clearSearchBar({ forceScrollToTop: true });
             setIsLoading(false);
           }}
         >
           {folderPaths.flatMap((folder, index) => {
-            return <Grid.Dropdown.Item key={index} title={folder} value={folder} />
+            return <Grid.Dropdown.Item key={index} title={folder} value={folder} />;
           })}
         </Grid.Dropdown>
       }
@@ -147,11 +141,15 @@ export default function Command() {
           <Grid.Item
             key={image.id}
             keywords={image.keywords}
-            title={preferences.titles ? image.name : ''}
-            content={ image.fileKind === "VIDEO" ? {fileIcon: image.fullPath} : {
-              source: image.fullPath,
-              fallback: Icon.Dot
-            }}
+            title={preferences.titles ? image.name : ""}
+            content={
+              image.fileKind === "VIDEO"
+                ? { fileIcon: image.fullPath }
+                : {
+                    source: image.fullPath,
+                    fallback: Icon.Dot,
+                  }
+            }
             quickLook={{ path: image.fullPath, name: image.name }}
             actions={
               <ActionPanel>
