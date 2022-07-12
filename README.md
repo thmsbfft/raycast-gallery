@@ -8,7 +8,7 @@
 Display and search images from a selection of folders.
 
 <p align='center'>
-  <img src='./metadata/gallery-1.png' width='600'/>
+  <img src='./metadata/gallery-1.png'/>
 </p>
 
 #### TODO
