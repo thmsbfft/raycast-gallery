@@ -1,5 +1,11 @@
 # Gallery Changelog
 
+## [Store Submission] - 2022-07-12
+
+- Update Open action icon
+- Cleanup copy across the project
+- Add extension screenshots
+
 ## [Refined Featureset] - 2022-07-08
 
 - Add a preference to include (or not) videos in results. Video files (.mp4, .mov, etc) don't display a thumbnail when referenced in a Raycast Grid Item yet, but work as expected when opening the file or using quicklook.
