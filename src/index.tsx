@@ -152,10 +152,14 @@ export default function Command() {
             }
             quickLook={{ path: image.fullPath, name: image.name }}
             actions={
-              <ActionPanel>
-                <Action.Open title="Open" target={image.fullPath} />
+              <ActionPanel title={image.name}>
+                <Action.Open 
+                  title="Open"
+                  icon={Icon.Upload}
+                  target={image.fullPath}
+                />
                 <Action.ShowInFinder
-                  title={"Open in Finder"}
+                  title={"Reveal in Finder"}
                   path={image.fullPath}
                   shortcut={{ modifiers: ["cmd"], key: "f" }}
                 />
