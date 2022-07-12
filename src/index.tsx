@@ -20,11 +20,14 @@ import { randomUUID } from "crypto";
 
 interface Preferences {
   paths: string;
+  videos: boolean;
+  titles: boolean;
+  itemSize: string;
 }
 
-type ImageList = Image[];
+type ImageList = ImageFile[];
 
-class Image {
+class ImageFile {
   id: string;
   name: string;
   displayPath: string;
@@ -47,6 +50,9 @@ class Image {
     if ([".mp4", ".mov", ".mkv", ".webm"].includes(ext)) {
       this.fileKind = "VIDEO";
     }
+    else {
+      this.fileKind = "IMAGE";
+    }
 
     // To create a list of keywords,
     // break down filename and trim
@@ -55,7 +61,7 @@ class Image {
   }
 }
 
-function getImages(folder?: string): {
+function getImages(folder: string): {
   images: ImageList;
 } {
   let scope: string[];
@@ -65,7 +71,7 @@ function getImages(folder?: string): {
   if (folder == "Everything") {
     scope = getPreferenceValues<Preferences>()
       .paths.split(",")
-      .map((s) => s.trim());
+      .map((p) => p.trim());
   } else {
     scope = new Array(folder.trim());
   }
@@ -82,8 +88,8 @@ function getImages(folder?: string): {
     .sort((a, b) => {
       // Sort by most recently created first
 
-      const aBirth = Date.parse(statSync(a)?.birthtime);
-      const bBirth = Date.parse(statSync(b)?.birthtime);
+      const aBirth = new Date(statSync(a)?.birthtime);
+      const bBirth = new Date(statSync(b)?.birthtime);
 
       if (aBirth > bBirth) {
         return -1;
@@ -91,7 +97,7 @@ function getImages(folder?: string): {
         return 1;
       }
     })
-    .map((path) => new Image(path));
+    .map((path) => new ImageFile(path));
 
   if (!getPreferenceValues<Preferences>().videos) {
     // If the preference (checkbox) is false,

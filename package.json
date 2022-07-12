@@ -73,6 +73,7 @@
     "open": "^8.4.0"
   },
   "devDependencies": {
+    "@types/glob": "^7.2.0",
     "@types/node": "~16.10.0",
     "@types/react": "^17.0.28",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
