@@ -11,7 +11,11 @@ Display and search images from a selection of folders.
   <img src='./metadata/gallery-1.png'/>
 </p>
 
-#### TODO
+- Switch between viewing everything or a single folder with `CMD+P`. Files are ordered by date of creation, so that the most recently created will come first.
+- Search keywords or filenames to filter the view.
+- Open files, use quicklook, or reveal them in Finder with `CMD+K`.
+
+#### TODO & Ideas
 ---
 
 - [x] Add a checkbox preference for displaying video files
