@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "gallery",
   "title": "Gallery",
-  "description": "Search and display images from a selection of system folders.",
+  "description": "Display and search images from a selection of folders.",
   "icon": "gallery.png",
   "author": "thmsbfft",
   "categories": [
@@ -14,16 +14,16 @@
     {
       "name": "index",
       "title": "Gallery",
-      "description": "Search and display images from a selection of system folders.",
+      "description": "Display and search images from a selection of folders.",
       "mode": "view",
       "preferences": [
         {
           "name": "paths",
           "type": "textfield",
           "required": true,
-          "title": "Paths to index:",
+          "title": "Folders to index:",
           "description": "Comma-separated list of paths to index.",
-          "placeholder": "~/Pictures,~/Dropbox/MOOD",
+          "placeholder": "~/Pictures, ~/Dropbox/MOOD",
           "default": ""
         },
         {

@@ -8,5 +8,3 @@
 - Use the Grid Dropdown to swap between "Everything" and each of the input folders. By default, the extension will open to show all folders at once.
 
 ## [Hello, World] - 2022-07-07
-
-[Initial Version]

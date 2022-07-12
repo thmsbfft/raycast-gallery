@@ -5,7 +5,11 @@
 #### Gallery
 ---
 
-Search and display images from a selection of system folders.
+Display and search images from a selection of folders.
+
+<p align='center'>
+  <img src='./metadata/gallery-1.png' width='600'/>
+</p>
 
 #### TODO
 ---
@@ -17,3 +21,5 @@ Search and display images from a selection of system folders.
 - [x] Figure out a way to index filenames for raycast search w/o having to display the item title
 - [x] Add a checkbox preference for showing filenames
 - [ ] Make a nicer empty screen
+- [ ] Add functions under `cmd+K` to rename or delete the selected file
+- [ ] Add a preference to order the files by e.g. Most recent, A-Z, or Random
