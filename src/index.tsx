@@ -8,7 +8,7 @@ import {
   Application,
   getPreferenceValues,
   clearSearchBar,
-  openCommandPreferences,
+  openCommandPreferences
 } from "@raycast/api";
 
 import open = require("open");
@@ -25,9 +25,9 @@ interface Preferences {
   itemSize: string;
 }
 
-type ImageList = ImageFile[];
+type MediaList = MediaFile[];
 
-class ImageFile {
+class MediaFile {
   id: string;
   name: string;
   displayPath: string;
@@ -61,8 +61,8 @@ class ImageFile {
   }
 }
 
-function getImages(folder: string): {
-  images: ImageList;
+function getMedia(folder: string): {
+  images: MediaList;
 } {
   let scope: string[];
 
@@ -97,7 +97,7 @@ function getImages(folder: string): {
         return 1;
       }
     })
-    .map((path) => new ImageFile(path));
+    .map((path) => new MediaFile(path));
 
   if (!getPreferenceValues<Preferences>().videos) {
     // If the preference (checkbox) is false,
@@ -116,7 +116,7 @@ export default function Command() {
   const folderPaths = preferences.paths.split(",").map((s) => s.trim());
   folderPaths.unshift("Everything");
 
-  const [{ images }, setImages] = useState(getImages(folderPaths[0]));
+  const [{ images }, setImages] = useState(getMedia(folderPaths[0]));
 
   return (
     <Grid
@@ -126,11 +126,11 @@ export default function Command() {
       itemSize={preferences.itemSize as Grid.ItemSize}
       searchBarAccessory={
         <Grid.Dropdown
-          tooltip="Size"
+          tooltip="View collection"
           storeValue={false}
           onChange={(newValue) => {
             // Reload images with correct filtering...
-            setImages(getImages(newValue));
+            setImages(getMedia(newValue));
             // This ↓ somehow doesn't seem to do anything?
             clearSearchBar({ forceScrollToTop: true });
             setIsLoading(false);
