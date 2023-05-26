@@ -66,7 +66,7 @@ class MediaFile {
   }
 }
 
-function getMedia(folder: string): {
+function getMediaFolder(folder: string): {
   images: MediaList;
 } {
   let scope: string[];
@@ -113,6 +113,31 @@ function getMedia(folder: string): {
   return { images };
 }
 
+function getGridItemContent(image: MediaFile) {
+  console.log(image);
+
+  if (image.fileKind === "VIDEO") {
+    // Videos
+    if(image.thumbnail) {
+      return { 
+        source: image.thumbnail
+      }
+    } 
+    else {
+      return {
+        fileIcon: image.fullPath
+      }
+    }
+  }
+  else {
+    // Images
+    return {
+      source: image.fullPath,
+      fallback: Icon.Dot,
+    }
+  }            
+}
+
 export default function Command() {
   const preferences = getPreferenceValues<Preferences>();
   const [isLoading, setIsLoading] = useState(false);
@@ -121,7 +146,7 @@ export default function Command() {
   const folderPaths = preferences.paths.split(",").map((s) => s.trim());
   folderPaths.unshift("Everything");
 
-  const [{ images }, setImages] = useState(getMedia(folderPaths[0]));
+  const [{ images }, setImages] = useState(getMediaFolder(folderPaths[0]));
 
   return (
     <Grid
@@ -134,8 +159,9 @@ export default function Command() {
           tooltip="View collection"
           storeValue={false}
           onChange={(newValue) => {
+            setIsLoading(true);
             // Reload images with correct filtering...
-            setImages(getMedia(newValue));
+            setImages(getMediaFolder(newValue));
             // This ↓ somehow doesn't seem to do anything?
             clearSearchBar({ forceScrollToTop: true });
             setIsLoading(false);
@@ -153,14 +179,7 @@ export default function Command() {
             key={image.id}
             keywords={image.keywords}
             title={preferences.titles ? image.name : ""}
-            content={
-              image.fileKind === "VIDEO"
-                ? { fileIcon: image.fullPath }
-                : {
-                    source: image.fullPath,
-                    fallback: Icon.Dot,
-                  }
-            }
+            content={getGridItemContent(image)}
             quickLook={{ path: image.fullPath, name: image.name }}
             actions={
               <ActionPanel title={image.name}>
