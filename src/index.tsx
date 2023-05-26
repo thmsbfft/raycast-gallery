@@ -18,12 +18,16 @@ import { sync } from "glob";
 import { extname } from "path";
 import { randomUUID } from "crypto";
 
+import { Indexer } from "./indexer"
+
 interface Preferences {
   paths: string;
   videos: boolean;
   titles: boolean;
   itemSize: string;
 }
+
+const indexer = new Indexer();
 
 type MediaList = MediaFile[];
 
@@ -49,6 +53,7 @@ class MediaFile {
     const ext = extname(this.fullPath);
     if ([".mp4", ".mov", ".mkv", ".webm"].includes(ext)) {
       this.fileKind = "VIDEO";
+      this.thumbnail = indexer.get_thumbnail(this.fullPath);
     }
     else {
       this.fileKind = "IMAGE";
