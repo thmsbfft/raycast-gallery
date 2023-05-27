@@ -46,6 +46,9 @@ class Indexer {
       .on("end", () => {
         console.log("Screenshot taken.");
       })
+      .on("error", (err) => {
+      	console.error("Failed to create thumbnail for:", file_path);
+      })
       .screenshots({
         count: 1,
         timestamps: ["33%"],
