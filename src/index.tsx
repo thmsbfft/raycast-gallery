@@ -1,24 +1,21 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import {
   ActionPanel,
   Action,
   Grid,
-  Image,
   Icon,
-  Application,
   getPreferenceValues,
   clearSearchBar,
-  openCommandPreferences
+  openCommandPreferences,
 } from "@raycast/api";
 
-import open = require("open");
 import { homedir } from "os";
 import { statSync } from "fs";
 import { sync } from "glob";
 import { extname } from "path";
 import { randomUUID } from "crypto";
 
-import { Indexer } from "./indexer"
+import { Indexer } from "./indexer";
 
 interface Preferences {
   paths: string;
@@ -54,11 +51,9 @@ class MediaFile {
     if ([".mp4", ".mov", ".mkv", ".webm", ".m4v"].includes(ext)) {
       this.fileKind = "VIDEO";
       this.thumbnail = indexer.get_thumbnail(this.fullPath);
-    }
-    else if ([".gif"].includes(ext)) {
+    } else if ([".gif"].includes(ext)) {
       this.fileKind = "GIF";
-    }
-    else {
+    } else {
       this.fileKind = "IMAGE";
     }
 
@@ -95,7 +90,6 @@ function getList(folder: string): {
     })
     .filter((path) => statSync(path)?.isFile())
     .sort((a, b) => {
-
       // Sort by most recently created first
       const aBirth = new Date(statSync(a)?.birthtime);
       const bBirth = new Date(statSync(b)?.birthtime);
@@ -118,29 +112,27 @@ function getList(folder: string): {
 }
 
 function getGridItemContent(media: MediaFile) {
-  console.log(media);
+  // console.log(media);
 
   if (media.fileKind === "VIDEO") {
     // Videos
-    if(media.thumbnail) {
-      return { 
-        source: media.thumbnail,
-        fallback: Icon.Dot
-      }
-    } 
-    else {
+    if (media.thumbnail) {
       return {
-        fileIcon: media.fullPath
-      }
+        source: media.thumbnail,
+        fallback: Icon.Dot,
+      };
+    } else {
+      return {
+        fileIcon: media.fullPath,
+      };
     }
-  }
-  else {
+  } else {
     // Images
     return {
       source: media.fullPath,
-      fallback: Icon.Dot
-    }
-  }            
+      fallback: Icon.Dot,
+    };
+  }
 }
 
 function getGridItemTitle(media: MediaFile) {
@@ -203,11 +195,7 @@ export default function Command() {
             quickLook={{ path: media.fullPath, name: media.name }}
             actions={
               <ActionPanel title={media.name}>
-                <Action.Open 
-                  title="Open"
-                  icon={Icon.Upload}
-                  target={media.fullPath}
-                />
+                <Action.Open title="Open" icon={Icon.Upload} target={media.fullPath} />
                 <Action.ShowInFinder
                   title={"Reveal in Finder"}
                   path={media.fullPath}
