@@ -34,7 +34,7 @@ class Indexer {
 		console.log(thumb_path);
 
 		if (fs.existsSync(thumb_path)) {
-			console.log('Thumbnail found.')
+			console.log('Thumbnail found.');
 			return thumb_path;
 		}
 		else {

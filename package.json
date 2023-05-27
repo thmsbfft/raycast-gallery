@@ -23,7 +23,7 @@
           "required": true,
           "title": "Folders to index:",
           "description": "Comma-separated list of paths to index.",
-          "placeholder": "~/Pictures, ~/Dropbox/MOOD",
+          "placeholder": "~/Pictures, ~/Dropbox/Art",
           "default": ""
         },
         {

@@ -66,13 +66,13 @@ class MediaFile {
   }
 }
 
-function getMediaFolder(folder: string): {
-  images: MediaList;
+function getList(folder: string): {
+  mediaList: MediaList;
 } {
   let scope: string[];
 
-  // The scope of search can be either everything,
-  // or a single folder path
+  // The scope of search is either literally
+  // "Everything", or a single folder path
   if (folder == "Everything") {
     scope = getPreferenceValues<Preferences>()
       .paths.split(",")
@@ -81,8 +81,9 @@ function getMediaFolder(folder: string): {
     scope = new Array(folder.trim());
   }
 
-  // Walk the scope and create Images
-  let images = scope
+  // Walk the scope and create
+  // the list of MediaFiles
+  let mediaList = scope
     .flatMap((base) => {
       if (base.startsWith("~")) {
         base = homedir() + base.slice(1);
@@ -91,8 +92,8 @@ function getMediaFolder(folder: string): {
     })
     .filter((path) => statSync(path)?.isFile())
     .sort((a, b) => {
-      // Sort by most recently created first
 
+      // Sort by most recently created first
       const aBirth = new Date(statSync(a)?.birthtime);
       const bBirth = new Date(statSync(b)?.birthtime);
 
@@ -106,36 +107,51 @@ function getMediaFolder(folder: string): {
 
   if (!getPreferenceValues<Preferences>().videos) {
     // If the preference (checkbox) is false,
-    // filter images to skip videos fileKind
-    images = images.filter((image) => image.fileKind != "VIDEO");
+    // filter the list to skip videos
+    mediaList = mediaList.filter((image) => image.fileKind != "VIDEO");
   }
 
-  return { images };
+  return { mediaList };
 }
 
-function getGridItemContent(image: MediaFile) {
-  console.log(image);
+function getGridItemContent(media: MediaFile) {
+  console.log(media);
 
-  if (image.fileKind === "VIDEO") {
+  if (media.fileKind === "VIDEO") {
     // Videos
-    if(image.thumbnail) {
+    if(media.thumbnail) {
       return { 
-        source: image.thumbnail
+        source: media.thumbnail
       }
     } 
     else {
       return {
-        fileIcon: image.fullPath
+        fileIcon: media.fullPath
       }
     }
   }
   else {
     // Images
     return {
-      source: image.fullPath,
+      source: media.fullPath,
       fallback: Icon.Dot,
     }
   }            
+}
+
+function getGridItemTitle(media: MediaFile) {
+  const preferences = getPreferenceValues<Preferences>();
+
+  if (preferences.titles) {
+    if (media.fileKind === "VIDEO") {
+      // Video filenames are decorated
+      // with a "play" indicator
+      return "▸ " + media.name;
+    }
+    return media.name;
+  }
+
+  return "";
 }
 
 export default function Command() {
@@ -146,7 +162,7 @@ export default function Command() {
   const folderPaths = preferences.paths.split(",").map((s) => s.trim());
   folderPaths.unshift("Everything");
 
-  const [{ images }, setImages] = useState(getMediaFolder(folderPaths[0]));
+  const [{ mediaList }, setMediaList] = useState(getList(folderPaths[0]));
 
   return (
     <Grid
@@ -160,8 +176,8 @@ export default function Command() {
           storeValue={false}
           onChange={(newValue) => {
             setIsLoading(true);
-            // Reload images with correct filtering...
-            setImages(getMediaFolder(newValue));
+            // Reload media list with the new scope...
+            setMediaList(getList(newValue));
             // This ↓ somehow doesn't seem to do anything?
             clearSearchBar({ forceScrollToTop: true });
             setIsLoading(false);
@@ -174,23 +190,23 @@ export default function Command() {
       }
     >
       {!isLoading &&
-        images.map((image) => (
+        mediaList.map((media) => (
           <Grid.Item
-            key={image.id}
-            keywords={image.keywords}
-            title={preferences.titles ? image.name : ""}
-            content={getGridItemContent(image)}
-            quickLook={{ path: image.fullPath, name: image.name }}
+            key={media.id}
+            keywords={media.keywords}
+            title={getGridItemTitle(media)}
+            content={getGridItemContent(media)}
+            quickLook={{ path: media.fullPath, name: media.name }}
             actions={
-              <ActionPanel title={image.name}>
+              <ActionPanel title={media.name}>
                 <Action.Open 
                   title="Open"
                   icon={Icon.Upload}
-                  target={image.fullPath}
+                  target={media.fullPath}
                 />
                 <Action.ShowInFinder
                   title={"Reveal in Finder"}
-                  path={image.fullPath}
+                  path={media.fullPath}
                   shortcut={{ modifiers: ["cmd"], key: "f" }}
                 />
                 <Action.ToggleQuickLook shortcut={{ modifiers: ["cmd"], key: "y" }} />
