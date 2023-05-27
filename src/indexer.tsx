@@ -53,6 +53,7 @@ class Indexer {
 			.screenshots({
 				count: 1,
 				timestamps: ['1'],
+				size: "800x?",
 				folder: this.thumbnails_path,
 				filename: thumb_name
 			});
