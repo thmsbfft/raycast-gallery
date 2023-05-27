@@ -55,6 +55,9 @@ class MediaFile {
       this.fileKind = "VIDEO";
       this.thumbnail = indexer.get_thumbnail(this.fullPath);
     }
+    else if ([".gif"].includes(ext)) {
+      this.fileKind = "GIF";
+    }
     else {
       this.fileKind = "IMAGE";
     }
@@ -143,8 +146,8 @@ function getGridItemTitle(media: MediaFile) {
   const preferences = getPreferenceValues<Preferences>();
 
   if (preferences.titles) {
-    if (media.fileKind === "VIDEO") {
-      // Video filenames are decorated
+    if (media.fileKind === "VIDEO" || media.fileKind === "GIF") {
+      // Video and GIF filenames are decorated
       // with a "play" indicator
       return "▸ " + media.name;
     }
