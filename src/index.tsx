@@ -51,7 +51,7 @@ class MediaFile {
     this.name = parts[parts.length - 1];
 
     const ext = extname(this.fullPath);
-    if ([".mp4", ".mov", ".mkv", ".webm"].includes(ext)) {
+    if ([".mp4", ".mov", ".mkv", ".webm", ".m4v"].includes(ext)) {
       this.fileKind = "VIDEO";
       this.thumbnail = indexer.get_thumbnail(this.fullPath);
     }
@@ -124,7 +124,8 @@ function getGridItemContent(media: MediaFile) {
     // Videos
     if(media.thumbnail) {
       return { 
-        source: media.thumbnail
+        source: media.thumbnail,
+        fallback: Icon.Dot
       }
     } 
     else {
@@ -137,7 +138,7 @@ function getGridItemContent(media: MediaFile) {
     // Images
     return {
       source: media.fullPath,
-      fallback: Icon.Dot,
+      fallback: Icon.Dot
     }
   }            
 }
