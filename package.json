@@ -70,8 +70,7 @@
   ],
   "dependencies": {
     "@raycast/api": "^1.52.1",
-    "fluent-ffmpeg": "^2.1.2",
-    "open": "^8.4.0"
+    "fluent-ffmpeg": "^2.1.2"
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",

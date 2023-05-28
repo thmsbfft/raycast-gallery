@@ -5,7 +5,6 @@ import {
   Grid,
   Icon,
   getPreferenceValues,
-  clearSearchBar,
   openCommandPreferences,
 } from "@raycast/api";
 
@@ -24,9 +23,9 @@ interface Preferences {
   itemSize: string;
 }
 
-const indexer = new Indexer();
-
 type MediaList = MediaFile[];
+
+let indexer;
 
 class MediaFile {
   id: string;
@@ -150,7 +149,13 @@ function getGridItemTitle(media: MediaFile) {
   return "";
 }
 
+async function resetIndex() {
+  indexer.reset();
+}
+
 export default function Command() {
+  indexer = new Indexer();
+
   const preferences = getPreferenceValues<Preferences>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -174,12 +179,11 @@ export default function Command() {
             setIsLoading(true);
             // Reload media list with the new scope...
             setMediaList(getList(newValue));
-            // This ↓ somehow doesn't seem to do anything?
-            clearSearchBar({ forceScrollToTop: true });
             setIsLoading(false);
           }}
         >
           {folderPaths.flatMap((folder, index) => {
+            if (folderPaths.length <= 2 && index == 1) return;
             return <Grid.Dropdown.Item key={index} title={folder} value={folder} />;
           })}
         </Grid.Dropdown>
@@ -195,19 +199,28 @@ export default function Command() {
             quickLook={{ path: media.fullPath, name: media.name }}
             actions={
               <ActionPanel title={media.name}>
-                <Action.Open title="Open" icon={Icon.Upload} target={media.fullPath} />
-                <Action.ShowInFinder
-                  title={"Reveal in Finder"}
-                  path={media.fullPath}
-                  shortcut={{ modifiers: ["cmd"], key: "f" }}
-                />
-                <Action.ToggleQuickLook shortcut={{ modifiers: ["cmd"], key: "y" }} />
-                <Action
-                  title="Configure Command"
-                  icon={Icon.Gear}
-                  shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
-                  onAction={openCommandPreferences}
-                />
+                <ActionPanel.Section title="">
+                  <Action.Open title="Open" icon={Icon.Upload} target={media.fullPath} />
+                  <Action.ShowInFinder
+                    title={"Reveal in Finder"}
+                    path={media.fullPath}
+                    shortcut={{ modifiers: ["cmd"], key: "f" }}
+                  />
+                  <Action.ToggleQuickLook shortcut={{ modifiers: ["cmd"], key: "y" }} />
+                </ActionPanel.Section>
+                <ActionPanel.Section title="Gallery">
+                  <Action
+                    title="Configure"
+                    icon={Icon.Gear}
+                    shortcut={{ modifiers: ["cmd", "shift"], key: "," }}
+                    onAction={openCommandPreferences}
+                  />
+                  <Action
+                    title="Reset Index"
+                    icon={Icon.Trash}
+                    onAction={resetIndex}
+                  />
+                </ActionPanel.Section>
               </ActionPanel>
             }
           />

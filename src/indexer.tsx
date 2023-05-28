@@ -1,4 +1,4 @@
-import { environment } from "@raycast/api";
+import { environment, closeMainWindow } from "@raycast/api";
 
 import fs from "fs";
 import path from "path";
@@ -26,7 +26,7 @@ class Indexer {
 
     const parsed = path.parse(file_path);
     const thumb_ext = parsed.ext.substring(1);
-    const thumb_filename = parsed.name + "-" + thumb_ext + ".jpg";
+    const thumb_filename = parsed.name + ".jpg";
     const thumb_path = this.thumbnails_path + "/" + thumb_filename;
 
     // console.log(thumb_path);
@@ -44,19 +44,36 @@ class Indexer {
     console.log("Creating thumbnail for:", file_path);
 
     ffmpeg(file_path)
-      .on("end", () => {
-        console.log("Screenshot taken.");
-      })
+	    .screenshots({
+	      count: 1,
+	      timestamps: ["33%"],
+	      size: "800x?",
+	      folder: this.thumbnails_path,
+	      filename: thumb_filename,
+	    })
       .on("error", (err) => {
       	console.error("Failed to create thumbnail for:", file_path);
       })
-      .screenshots({
-        count: 1,
-        timestamps: ["33%"],
-        size: "800x?",
-        folder: this.thumbnails_path,
-        filename: thumb_filename,
+      .on("end", () => {
+        console.log("Thumbnail saved.");
       });
+  }
+
+  async reset() {
+  	// Will delete thumbnail files
+  	console.log('Resetting...');
+
+  	fs.readdir(this.thumbnails_path, (err, files) => {
+  		if (err) throw err;
+
+  		for (const file of files) {
+  			fs.unlink(path.join(this.thumbnails_path, file), (err) => {
+  				if (err) throw err;
+  			});
+  		}
+  	});
+
+  	await closeMainWindow({ clearRootSearch: true });
   }
 }
 
