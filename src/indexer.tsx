@@ -25,8 +25,9 @@ class Indexer {
     // console.log("Getting thumbnail for:", file_path);
 
     const parsed = path.parse(file_path);
-    const thumb_path = this.thumbnails_path + "/" + parsed.name + ".jpg";
-    const thumb_filename = parsed.name + ".jpg";
+    const thumb_ext = parsed.ext.substring(1);
+    const thumb_filename = parsed.name + "-" + thumb_ext + ".jpg";
+    const thumb_path = this.thumbnails_path + "/" + thumb_filename;
 
     // console.log(thumb_path);
 
